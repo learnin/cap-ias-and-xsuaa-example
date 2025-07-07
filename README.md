@@ -44,3 +44,13 @@ General > Policy-Based Authorizations を有効化
 - とりあえず、動くようになったというだけで不要な設定はおそらく色々あると思われる
 - DBはHANA Cloudの設定となっているが、認証の確認には不要のため未利用。動かしているとDB接続エラーは出るが無視している
 
+## 参考 URL
+
+- Enabling Authorization Policies in SAP Cloud Identity Services - IAS with AMS/CAP https://community.sap.com/t5/technology-blog-posts-by-sap/enabling-authorization-policies-in-sap-cloud-identity-services-ias-with-ams/ba-p/13972718
+- Authorization Management Service (AMS)を利用したCAPの権限管理 - アップデート https://qiita.com/tami/items/2c3696fcf5718f0c9515
+- Configure Authorization and Authentication Using the Authorization Management Service and the Identity Authentication Service https://github.com/SAP-samples/btp-developer-guide-cap/blob/main/documentation/xsuaa-to-ams/README.md
+- SAP BTP の Identity Service の参照情報 https://help.sap.com/docs/cloud-identity-services/cloud-identity-services/reference-information-for-identity-service-of-sap-btp?locale=ja-JP
+- SAP Authorization and Trust Management サービス と SAP Cloud Identity Services の間のトラストおよび連携の確立 https://help.sap.com/docs/authorization-and-trust-management-service/authorization-and-trust-management/establish-trust-and-federation-between-uaa-and-identity-authentication
+- routes https://help.sap.com/docs/cloud-portal-service/sap-cloud-portal-service-on-cloud-foundry/routes?locale=ja-JP
+- @sap/approuter https://www.npmjs.com/package/@sap/approuter
+
