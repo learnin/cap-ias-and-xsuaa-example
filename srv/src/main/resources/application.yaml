@@ -5,8 +5,8 @@ spring:
   sql.init.platform: h2
 cds:
   data-source.auto-config.enabled: false
-cds.security.authentication.mode: never
-sap.spring.security.identity.prooftoken: false
+# cds.security.authentication.mode: never
+# sap.spring.security.identity.prooftoken: false
 ---
 management:
   endpoint:
