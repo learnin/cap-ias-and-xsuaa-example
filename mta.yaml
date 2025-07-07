@@ -70,7 +70,7 @@ modules:
           forwardAuthToken: true
           forwardAuthCertificates: true
           strictSSL: true
-      - name: cap01-auth
+      # - name: cap01-auth
       - name: cap01-destination
       - name: cap01-ias-auth
         parameters:
