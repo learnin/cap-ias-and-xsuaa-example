@@ -1,0 +1,23 @@
+{
+  "routes": [
+    {
+      "source": "^/actuator/health/ping$",
+      "destination": "srv-api",
+      "csrfProtection": true,
+      "authenticationType": "ias"
+    },
+    {
+      "source": "^/actuator/health/db$",
+      "destination": "srv-api",
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": true,
+      "authenticationType": "none"
+    }
+  ]
+}
