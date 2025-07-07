@@ -15,7 +15,7 @@
 `CAP アプリにバインドしている XSUAA のurl + /oauth/token` に XSUAA の `clientid` と `clientsecret` でBASIC認証で body に `grant_type=client_credentials` の POST リクエストを送信して（OAuth 2.0 クライアントクレデンシャルズフロー）、 `access_token` を取得し、CAP アプリのURLに `Authorization: Bearer <access_token>` ヘッダをつけてリクエストを送信することでアクセス可能。  
 
 1、2ともCAPアプリにいきなり直接アクセスした場合は401エラーが返される。  
-なお、2に対してブラウザからApp RouterのURLにアクセスした場合は、1と同様にIAS認証が行われCAPアプリにアクセス可能。  
+なお、2に対してApp RouterのURLにアクセスした場合は、ルーティングを設定していないため404エラーが返される。  
 
 ### BTP サブアカウントの設定
 
