@@ -36,9 +36,11 @@ General > Policy-Based Authorizations を有効化
 - Trust > Single Sign-On > Subject Name Identifier の Primary Attribute の Value を `Email` に設定
 - Trust > Application APIs > Dependencies の Services に `cap01-ias (AMS)` と `SAP BTP subaccount サブアカウント名` が登録されている（※自分で設定したか自動的に設定されたかは失念）
 
-* 今回は作成していないが、CAP アプリのポリシーを設定している場合はデプロイすると Authorization Policies に表示されるので、それをユーザに割り当てることでアプリの権限管理が可能。
+※今回は作成していないが、CAP アプリのポリシーを設定している場合はデプロイすると Authorization Policies に表示されるので、それをユーザに割り当てることでアプリの権限管理が可能。
 
 ## 注意
 
+- このサンプルで動作を確認したのは、上記のパスによる認証の挙動のみ
 - とりあえず、動くようになったというだけで不要な設定はおそらく色々あると思われる
+- DBはHANA Cloudの設定となっているが、認証の確認には不要のため未利用。動かしているとDB接続エラーは出るが無視している
 
