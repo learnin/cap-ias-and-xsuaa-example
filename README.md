@@ -7,9 +7,10 @@
 - IAS
 - XSUAA
 - 宛先サービス
+- HANA Cloud
 
-1. /actuator/health/ping: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
-2. /actuator/health/db: システムからのアクセス向け。システム -> CAP アプリ  
+1. /actuator/health/ping, /rest/, /odata/: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
+2. /actuator/health/db: 他システムからのアクセス向け。他システム -> CAP アプリ  
 
 2の方は  
 `CAP アプリにバインドしている XSUAA のurl + /oauth/token` に XSUAA の `clientid` と `clientsecret` でBASIC認証で body に `grant_type=client_credentials` の POST リクエストを送信して（OAuth 2.0 クライアントクレデンシャルズフロー）、 `access_token` を取得し、CAP アプリのURLに `Authorization: Bearer <access_token>` ヘッダをつけてリクエストを送信することでアクセス可能。  
@@ -20,6 +21,15 @@
 ### BTP サブアカウントの設定
 
 Security > Trust Configuration で `Establish Trust` ボタンを押し、IAS と OIDC で信頼関係を構築する。
+
+### Build & Deploy
+
+```
+mta build
+cf deploy mta_archives/cap01_1.0.0-SNAPSHOT.mtar
+```
+
+ローカルで動かすときは `mvn spring-boot:run` など。  
 
 ### IAS の設定
 
@@ -34,15 +44,12 @@ General > Policy-Based Authorizations を有効化
 - Trust > Single Sign-On > OpenID Connect Configuration の Redirect URIs に `App Router の URL + /login/callback` が設定されていることを確認
 - Trust > Single Sign-On > OpenID Connect Configuration の Advanced Settings の Access Token Format を `JSON Web Token` に設定
 - Trust > Single Sign-On > Subject Name Identifier の Primary Attribute の Value を `Email` に設定
-- Trust > Application APIs > Dependencies の Services に `cap01-ias (AMS)` と `SAP BTP subaccount サブアカウント名` が登録されている（※自分で設定したか自動的に設定されたかは失念）
-
-※今回は作成していないが、CAP アプリのポリシーを設定している場合はデプロイすると Authorization Policies に表示されるので、それをユーザに割り当てることでアプリの権限管理が可能。
+- Trust > Application APIs > Dependencies の Services に `cap01-ias (AMS)` と `SAP BTP subaccount サブアカウント名` が登録されている
+- アプリをデプロイすると、Authorization Policies に CDS で設定しているロールがポリシーとして登録されるので、それをユーザに割り当てることでアプリの権限管理を行う
 
 ## 注意
 
-- このサンプルで動作を確認したのは、上記のパスによる認証の挙動のみ
 - とりあえず、動くようになったというだけで不要な設定はおそらく色々あると思われる
-- DBはHANA Cloudの設定となっているが、認証の確認には不要のため未利用。動かしているとDB接続エラーは出るが無視している
 
 ## 参考 URL
 

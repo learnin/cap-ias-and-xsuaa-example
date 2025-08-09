@@ -32,28 +32,28 @@ modules:
           srv-cert-url: '${protocol}://${default-host}.cert.${default-domain}'
     requires:
       - name: cap01-auth
-      # - name: cap01-db
+      - name: cap01-db
       - name: cap01-destination
       - name: cap01-ias-auth
         parameters:
           config:
             credential-type: X509_GENERATED
             app-identifier: srv
+    deployed-after:
+      - cap01-ams-policies-deployer
 
-      # - name: cap01-db-deployer
-      #   type: hdb
-      #   path: db
-      #   parameters:
-      #     buildpack: nodejs_buildpack
-      #   build-parameters:
-      #     builder: custom
-      #     commands:
-      #       - npm run build
-      #   requires:
-      #     - name: cap01-db
+  - name: cap01-db-deployer
+    type: hdb
+    path: db
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+    requires:
+      - name: cap01-db
 
-    # deployed-after:
-    #   - cap01-ams-policies-deployer
   - name: cap01
     type: approuter.nodejs
     path: app/router
@@ -70,7 +70,6 @@ modules:
           forwardAuthToken: true
           forwardAuthCertificates: true
           strictSSL: true
-      # - name: cap01-auth
       - name: cap01-destination
       - name: cap01-ias-auth
         parameters:
@@ -85,40 +84,39 @@ modules:
           app-uri: ${default-uri}
           url: ${default-url}
 
-  # - name: cap01-ams-policies-deployer
-  #   type: javascript.nodejs
+  - name: cap01-ams-policies-deployer
+    type: javascript.nodejs
+    path: .
+    build-parameters:
+      builder: custom
+      commands:
+        - npx cds build --for ams
+      build-result: srv/src/gen/policies
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - name: deploy-dcl
+          command: npm start
+          memory: 512M
+    requires:
+      - name: cap01-ias-auth
+        parameters:
+          config:
+            credential-type: X509_GENERATED
+            app-identifier: ams-policy-deployer
+
+  # - name: cap01-app-deployer
+  #   type: com.sap.application.content
   #   path: .
-  #   build-parameters:
-  #     builder: custom
-  #     commands:
-  #       - npx cds build --for ams
-  #     build-result: srv/src/gen/policies
-  #   parameters:
-  #     buildpack: nodejs_buildpack
-  #     no-route: true
-  #     no-start: true
-  #     tasks:
-  #       - name: deploy-dcl
-  #         command: npm start
-  #         memory: 512M
   #   requires:
-  #     - name: cap01-ias-auth
+  #     - name: cap01-html5-repo-host
   #       parameters:
-  #         config:
-  #           credential-type: X509_GENERATED
-  #           app-identifier: ams-policy-deployer
-
-        # - name: cap01-app-deployer
-        #   type: com.sap.application.content
-        #   path: .
-        #   requires:
-        #     - name: cap01-html5-repo-host
-        #       parameters:
-        #         content-target: true
-        #   build-parameters:
-        #     build-result: resources
-        #     requires:
-
+  #         content-target: true
+  #   build-parameters:
+  #     build-result: resources
+  #     requires:
 
 resources:
   - name: cap01-auth
@@ -174,11 +172,11 @@ resources:
     #   type: org.cloudfoundry.existing-service
     #   parameters:
     #     service-name: cap01-ias
-    # - name: cap01-db
-    #   type: com.sap.xs.hdi-container
-    #   parameters:
-    #     service: hana
-    #     service-plan: hdi-shared
+  - name: cap01-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
   - name: cap01-destination
     type: org.cloudfoundry.managed-service
     parameters:

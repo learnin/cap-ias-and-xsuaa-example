@@ -12,6 +12,7 @@
   "cds": {
     "requires": {
       "[production]": {
+        "db": "hana",
         "auth": {
           "kind": "ias"
         }

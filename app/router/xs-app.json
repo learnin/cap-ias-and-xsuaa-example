@@ -5,6 +5,18 @@
       "destination": "srv-api",
       "csrfProtection": true,
       "authenticationType": "ias"
+    },
+    {
+      "source": "^/rest/.*",
+      "destination": "srv-api",
+      "csrfProtection": true,
+      "authenticationType": "ias"
+    },
+    {
+      "source": "^/odata/.*",
+      "destination": "srv-api",
+      "csrfProtection": true,
+      "authenticationType": "ias"
     }
   ]
 }
