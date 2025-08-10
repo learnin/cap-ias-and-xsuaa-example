@@ -50,6 +50,37 @@ General > Policy-Based Authorizations を有効化
 ## 注意
 
 - とりあえず、動くようになったというだけで不要な設定はおそらく色々あると思われる
+- ローカル（BAS）で動かす場合、IASがバインドされないため、`cloud` 以外のプロファイルで起動することで、BASIC 認証でモックユーザでログインすることになるが、現状、ログインすると次のエラーが発生する。
+  ```
+  com.sap.cds.services.utils.ErrorStatusException: Internal server error
+        at com.sap.cloud.security.ams.capsupport.AmsUserInfoProvider.get(AmsUserInfoProvider.java:152) ~[cap-ams-support-2.5.0.jar:na]
+        at com.sap.cds.services.impl.runtime.CdsRuntimeImpl.getProvidedUserInfo(CdsRuntimeImpl.java:116) ~[cds-services-impl-4.0.2.jar:na]
+        at com.sap.cds.services.impl.runtime.RequestContextRunnerImpl.providedUserInfo(RequestContextRunnerImpl.java:308) ~[cds-services-impl-4.0.2.jar:na]
+        ...
+  ```
+  回避するには一旦ローカルではAMS設定を外す。具体的には `srv/pom.xml` の
+  ```
+  		<dependency>
+			<groupId>com.sap.cloud.security.ams.client</groupId>
+			<artifactId>jakarta-ams</artifactId>
+			<version>${sap.cloud.security.ams.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sap.cloud.security.ams.client</groupId>
+			<artifactId>cap-ams-support</artifactId>
+			<version>${sap.cloud.security.ams.version}</version>
+		</dependency>
+  ```
+  と
+  ```
+  								<command>build --for ams</command>
+  ```
+  をコメントアウトし、 `package.json` の
+  ```
+      "@sap/ams" : "^3"
+  ```
+  を削除する。
 
 ## 参考 URL
 
