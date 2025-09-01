@@ -37,5 +37,7 @@ public class Example01Handler implements EventHandler {
         userInfo.getAdditionalAttributes().forEach((key, val) -> {
             logger.info("addAttr: " + key + "=" + val);
         });
+
+        logger.info(items.toList().size() + " records");
     }
 }
