@@ -1,5 +1,7 @@
 package customer.cap01.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sap.cds.services.cds.CdsReadEventContext;
 import com.sap.cds.services.request.UserInfo;
+import com.sap.cds.Result;
 import com.sap.cds.ql.Select;
 
 import cds.gen.example01service.Example01Service;
@@ -41,7 +44,13 @@ public class Example01Controller {
         context.setCqn(Select.from("Example01Service.Items"));
         example01Service.emit(context);
 
+        // runメソッドを使って呼び出すことも可能。
+        // Result result = example01Service.run(Select.from("Example01Service.Items"));
+
         logger.info("@@@@@@@ 2");
+        Result result = context.getResult();
+        
+        result.forEach(row -> logger.info(row.toString()));
         return "hello";
     }
 }

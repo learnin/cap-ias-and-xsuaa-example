@@ -1,5 +1,6 @@
 package customer.cap01.handler;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class Example01Handler implements EventHandler {
     private UserInfo userInfo;
 
     @After(event = CqnService.EVENT_READ)
-    public void afterReadItems(Stream<Items> items) {
+    public List<Items> afterReadItems(List<Items> items) {
         logger.info("######");
         logger.info("id=" + userInfo.getId());
         logger.info("name=" + userInfo.getName());
@@ -38,6 +39,11 @@ public class Example01Handler implements EventHandler {
             logger.info("addAttr: " + key + "=" + val);
         });
 
-        logger.info(items.toList().size() + " records");
+        Items item = Items.create();
+        item.setId("485fcda8-0c68-96ec-8e2a-eb8e38492bf5");
+        item.setName("aaa");
+        items.add(item);
+        logger.info(items.size() + " records");
+        return items;
     }
 }
