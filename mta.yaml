@@ -39,6 +39,7 @@ modules:
           config:
             credential-type: X509_GENERATED
             app-identifier: srv
+      - name: cloud-logging-instance
     deployed-after:
       - cap01-ams-policies-deployer
 
@@ -219,3 +220,9 @@ resources:
   #   parameters:
   #     service: html5-apps-repo
   #     service-plan: app-runtime
+
+  - name: cloud-logging-instance
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs #cloud-logging
+      service-plan: lite #standard

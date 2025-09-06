@@ -20,6 +20,7 @@
 		<cds.install-node.downloadUrl>https://nodejs.org/dist/</cds.install-node.downloadUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sap.cloud.security.ams.version>2.5.0</sap.cloud.security.ams.version>
+		<logging.support.version>3.8.6</logging.support.version>
 	</properties>
 
 	<modules>
