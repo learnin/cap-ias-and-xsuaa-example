@@ -55,10 +55,11 @@ General > Policy-Based Authorizations を有効化
 これによりアプリから出力した内容以外にも多くの情報が付加されて出力されるが、項目にログインユーザIDがないので、カスタムフィールドとしてMDCを使って `user_id` という項目を追加出力している。MDCのセットは `SettingLogMDCFilter.java` で行い、設定は `logback-spring.xml` 。  
 アプリログ以外に、Cloud Foundry の Gorouter がリクエストログ（アクセスログ）も出力する (https://docs.cloudfoundry.org/devguide/deploy-apps/streaming-logs.html#rtr)。  
 上述のライブラリからもリクエストログを出力可能だが、出力される情報はあまり変わらず、また Gorouter のログと2重出力になるため、利用していない。  
+リクエストログとアプリログには、相関ID `correlation_id` が付与されるため、それで同一リクエスト内のログであることが確認できる。相関IDは Gorouter のリクエストログにも付与される。
 
 ## メトリクス
 
-Spring Actuator のメトリクスは OTel で CLS へ連携できるらしい。Trial プランがないため未検証だが、設定だけコメントアウトで入れている。  
+Spring Actuator で取得できるメトリクスは OpenTelemetry で CLS へ連携できるらしい。Trial プランがないため未検証だが、設定だけコメントアウトで入れている。  
 設定方法は https://cap.cloud.sap/docs/java/operating-applications/observability#open-telemetry を参照。  
 
 ## 注意
