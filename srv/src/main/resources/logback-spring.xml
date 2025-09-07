@@ -11,7 +11,6 @@
         <root level="${LOG_ROOT_LEVEL:-INFO}">
             <appender-ref ref="STDOUT-JSON" />
         </root>
-        <logger name="com.sap.hcp.cf" level="INFO" />
     </springProfile>
 	<springProfile name="!cloud">
 		<include resource="org/springframework/boot/logging/logback/base.xml"/>

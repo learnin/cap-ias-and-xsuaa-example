@@ -20,6 +20,14 @@ modules:
       JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jre.SAPMachineJRE']"
       JBP_CONFIG_SAP_MACHINE_JRE: '{ version: 21.+ }'
       AMS_DCL_ROOT: ams/dcl
+      # JBP_CONFIG_JAVA_OPTS:
+      #   from_environment: false
+      #   java_opts: >
+      #     -javaagent:META-INF/.sap_java_buildpack/otel_agent/opentelemetry-javaagent.jar
+      #     -Dotel.javaagent.extensions=META-INF/.sap_java_buildpack/otel_agent_extension/otel-agent-ext-java.jar
+      # OTEL_METRICS_EXPORTER: cloud-logging
+      # OTEL_TRACES_EXPORTER: cloud-logging
+      # OTEL_LOGS_EXPORTER: none
     build-parameters:
       builder: custom
       commands:
@@ -226,3 +234,6 @@ resources:
     parameters:
       service: application-logs #cloud-logging
       service-plan: lite #standard
+      # config:
+      #   ingest_otlp:
+      #     enabled: true

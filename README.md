@@ -8,6 +8,7 @@
 - XSUAA
 - 宛先サービス
 - HANA Cloud
+- Application Logging Service
 
 1. /actuator/health/ping, /rest/, /odata/: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
 2. /actuator/health/db: 他システムからのアクセス向け。他システム -> CAP アプリ  
@@ -46,6 +47,19 @@ General > Policy-Based Authorizations を有効化
 - Trust > Single Sign-On > Subject Name Identifier の Primary Attribute の Value を `Email` に設定
 - Trust > Application APIs > Dependencies の Services に `cap01-ias (AMS)` と `SAP BTP subaccount サブアカウント名` が登録されている
 - アプリをデプロイすると、Authorization Policies に CDS で設定しているロールがポリシーとして登録されるので、それをユーザに割り当てることでアプリの権限管理を行う
+
+## ロギング
+
+2025年9月現在、Cloud Logging Service の Trial プランは提供されていないため、 Application Logging Service（ALS）をバインドしている。  
+バインドさえすれば、とりあえず標準出力に出力したログはALSへ連携されるが、ALSではJSON形式の構造化ログで構成されるため出力内容がすべてmsgフィールドとして扱われてしまうため、 https://github.com/SAP/cf-java-logging-support を導入している。  
+これによりアプリから出力した内容以外にも多くの情報が付加されて出力されるが、項目にログインユーザIDがないので、カスタムフィールドとしてMDCを使って `user_id` という項目を追加出力している。MDCのセットは `SettingLogMDCFilter.java` で行い、設定は `logback-spring.xml` 。  
+アプリログ以外に、Cloud Foundry の Gorouter がリクエストログ（アクセスログ）も出力する (https://docs.cloudfoundry.org/devguide/deploy-apps/streaming-logs.html#rtr)。  
+上述のライブラリからもリクエストログを出力可能だが、出力される情報はあまり変わらず、また Gorouter のログと2重出力になるため、利用していない。  
+
+## メトリクス
+
+Spring Actuator のメトリクスは OTel で CLS へ連携できるらしい。Trial プランがないため未検証だが、設定だけコメントアウトで入れている。  
+設定方法は https://cap.cloud.sap/docs/java/operating-applications/observability#open-telemetry を参照。  
 
 ## 注意
 
