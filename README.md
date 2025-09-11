@@ -11,10 +11,14 @@
 - Application Logging Service
 
 1. /actuator/health/ping, /rest/, /odata/: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
-2. /actuator/health/db: 他システムからのアクセス向け。他システム -> CAP アプリ  
+2. /actuator/health/db を含む全 API: システム内の他アプリケーション、サービスからのアクセス向け。他アプリ・サービス -> CAP アプリ  
 
 2の方は  
 `CAP アプリにバインドしている XSUAA のurl + /oauth/token` に XSUAA の `clientid` と `clientsecret` でBASIC認証で body に `grant_type=client_credentials` の POST リクエストを送信して（OAuth 2.0 クライアントクレデンシャルズフロー）、 `access_token` を取得し、CAP アプリのURLに `Authorization: Bearer <access_token>` ヘッダをつけてリクエストを送信することでアクセス可能。  
+CAP アプリにバインドしている `grant-types: client_credentials` の XSUAA で認証されているリクエストなので、 CAP では自動的に `internal-user` 疑似ロール扱いとなる。  
+（なお、もしも他社システムからアクセスさせる場合は、 他社からのアクセス用の XSUAA インスタンスを追加してバインドさせて、CAP側の XSUAA の `xs-security.json` で `scopes` でスコープを `"grant-as-authority-to-apps": ["$XSAPPNAME(他社からのアクセス用XSUAA名)"]` 付きで定義し、  
+他社からのアクセス用の XSUAA の `authorities` で、定義したスコープを列挙し、そのサービスキーを他社システムに渡せばよいみたい。  
+cf. https://help.sap.com/docs/btp/sap-business-technology-platform/application-security-descriptor-configuration-syntax ）  
 
 1、2ともCAPアプリにいきなり直接アクセスした場合は401エラーが返される。  
 なお、2に対してApp RouterのURLにアクセスした場合は、ルーティングを設定していないため404エラーが返される。  

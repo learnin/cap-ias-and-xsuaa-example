@@ -140,6 +140,8 @@ resources:
         oauth2-configuration:
           redirect-uris:
             - https://~{app-api/app-uri}/**
+          grant-types:
+            - client_credentials
     requires:
       - name: app-api
   - name: cap01-ias-auth
