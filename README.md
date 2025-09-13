@@ -30,7 +30,7 @@ Security > Trust Configuration で `Establish Trust` ボタンを押し、IAS �
 ### Build & Deploy
 
 ```
-mta build
+mbt build
 cf deploy mta_archives/cap01_1.0.0-SNAPSHOT.mtar
 ```
 
