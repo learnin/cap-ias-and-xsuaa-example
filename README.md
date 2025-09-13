@@ -10,8 +10,10 @@
 - HANA Cloud
 - Application Logging Service
 
-1. /actuator/health/ping, /rest/, /odata/: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
-2. /actuator/health/db を含む全 API: システム内の他アプリケーション、サービスからのアクセス向け。他アプリ・サービス -> CAP アプリ  
+1. /rest/, /odata/: ユーザからのアクセス向け。ブラウザ -> App Router -> IAS認証 -> CAP アプリ  
+2. /actuator/health： 外形監視向け。監視システム -> App Router -> CAP アプリ  
+3. すべてのパス: システム内の他アプリケーション、サービスからのアクセス向け。他アプリ・サービス -> (XSUAA でアクセストークン取得) -> CAP アプリ  
+
 
 2の方は  
 `CAP アプリにバインドしている XSUAA のurl + /oauth/token` に XSUAA の `clientid` と `clientsecret` でBASIC認証で body に `grant_type=client_credentials` の POST リクエストを送信して（OAuth 2.0 クライアントクレデンシャルズフロー）、 `access_token` を取得し、CAP アプリのURLに `Authorization: Bearer <access_token>` ヘッダをつけてリクエストを送信することでアクセス可能。  

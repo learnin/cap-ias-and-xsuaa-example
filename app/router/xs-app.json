@@ -1,10 +1,10 @@
 {
   "routes": [
     {
-      "source": "^/actuator/health/ping$",
+      "source": "^/actuator/health$",
       "destination": "srv-api",
-      "csrfProtection": true,
-      "authenticationType": "ias"
+      "csrfProtection": false,
+      "authenticationType": "none"
     },
     {
       "source": "^/rest/.*",
