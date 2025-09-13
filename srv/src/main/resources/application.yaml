@@ -3,6 +3,7 @@
 spring:
   config.activate.on-profile: default
   sql.init.platform: h2
+# sap.spring.security.identity.prooftoken: false
 cds:
   data-source.auto-config.enabled: false
 ---
@@ -12,6 +13,9 @@ management:
       show-components: always
       probes:
         enabled: true
+      group:
+        readiness:
+          include: readinessState,db
   endpoints:
     web:
       exposure:
