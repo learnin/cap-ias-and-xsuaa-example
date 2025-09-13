@@ -15,6 +15,12 @@ modules:
       routes:
         - route: "${default-url}"
         - route: "${default-host}.cert.${default-domain}"
+      health-check-type: http
+      health-check-http-endpoint: /actuator/health/liveness
+      health-check-invocation-timeout: 5
+      # readiness-health-check パラメータは mbt が未対応
+      # readiness-health-check-type: http
+      # readiness-health-check-http-endpoint: /actuator/health/readiness
     properties:
       SPRING_PROFILES_ACTIVE: cloud,sandbox
       JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jre.SAPMachineJRE']"

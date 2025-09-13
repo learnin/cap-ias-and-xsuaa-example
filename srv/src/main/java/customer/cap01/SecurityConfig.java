@@ -24,6 +24,8 @@ public class SecurityConfig {
             // CAP アプリでは Authorization ヘッダの JWT で認証するため CSRF トークンチェックは不要。ユーザからのアクセスは App Router で CSRF トークンチェックが行われる。
             .csrf(c -> c.disable())
             .authorizeHttpRequests(authorize -> authorize
+            // Cloud Foundry からのヘルスチェックを受けるエンドポイントは認証不要にする。
+            .requestMatchers("/actuator/health/**").permitAll()
             .anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> oauth2
             .jwt(jwt -> jwt
