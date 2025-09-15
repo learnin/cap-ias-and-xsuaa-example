@@ -14,29 +14,28 @@ service Example01Service {
     @restrict: [{grant: ['READ','WRITE'], to: ['Admin', 'internal-user']},
                 {grant: ['READ'], to: 'Viewer'}]
     entity Books as projection on _Books actions {
-        // これだと /odata/v4/Example01Service/Books/Example01Service.download() へのアクセスで
-        // org.apache.olingo.server.core.ODataHandlerException: not implemented が発生する。
-        // https://cap.cloud.sap/docs/cds/cdl#actions-returning-media に記載されているやり方だが CAP Java というか Olingo では未対応か。
+        // /odata/v4/Example01Service/Books/Example01Service.download()
         function download(in: many $self) returns CsvFile;
 
-        // これだと /odata/v4/Example01Service/Books/Example01Service.download2() へのアクセスで
-        // com.sap.cds.reflect.CdsElementNotFoundException: No element with name 'download' in 'Example01Service.Books' が発生する
-        // function download2(in: many $self) returns LargeBinary @Core.MediaType: 'text/csv' @Core.ContentDisposition.Filename: 'hoge.csv' @Core.ContentDisposition.Type: 'attachment';
+        // これだと content-disposition レスポンスヘッダがセットされない
+        // function download(in: many $self) returns LargeBinary @Core.MediaType: 'text/csv' @Core.ContentDisposition.Filename: 'hoge.csv' @Core.ContentDisposition.Type: 'attachment';
     };
 
     @restrict: [{grant: 'READ', to: ['Admin', 'Viewer', 'internal-user']}]
     entity CsvFileEntity {
         key id : Integer;
+        filename : String;
 
-        // これは /odata/v4/Example01Service/CsvFileEntity(1)/data へのアクセスでファイルがダウンロードされる。
-        // なお、 /odata/v4/Example01Service/CsvFileEntity/data へのアクセスだと The property 'data' must not follow a collection. で400エラーになる。
-        virtual data : LargeBinary @Core.MediaType: 'text/csv' @Core.ContentDisposition.Filename: 'hoge.csv' @Core.ContentDisposition.Type: 'attachment';
+        // /odata/v4/Example01Service/CsvFileEntity(n)/data
+        // セットされるレスポンスヘッダは次の通り。content-disposition: attachment; filename*=UTF-8''ファイル名 のようにエンコーディング指定はされない。
+        // content-type: text/csv
+        // content-disposition: attachment; filename="%E3%81%82%E3%81%84%E3%81%86.csv"
+        data : LargeBinary @Core.MediaType: 'text/csv' @Core.ContentDisposition.Filename: filename @Core.ContentDisposition.Type: 'attachment';
     }
 
-    // これだと /odata/v4/Example01Service/download() へのアクセスで org.apache.olingo.server.core.ODataHandlerException: not implemented が発生する
+    // /odata/v4/Example01Service/download()
     function download() returns CsvFile;
 
-    // これだと /odata/v4/Example01Service/download() へのアクセスで
-    // java.lang.NullPointerException: Cannot invoke "org.apache.olingo.server.api.uri.UriResourcePartTyped.getType()" because the return value of "com.sap.cds.adapter.odata.v4.processors.request.CdsODataRequest.getLastEntityResource(boolean)" is null が発生する
+    // これだと content-disposition レスポンスヘッダがセットされない
     // function download() returns　LargeBinary @Core.MediaType: 'text/csv' @Core.ContentDisposition.Filename: 'hoge.csv' @Core.ContentDisposition.Type: 'attachment';
 }

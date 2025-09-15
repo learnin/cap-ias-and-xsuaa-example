@@ -2,6 +2,8 @@ package customer.cap01.handler;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -89,7 +91,7 @@ public class Example01Handler implements EventHandler {
         context.setCompleted();
     }
 
-    // /odata/v4/Example01Service/CsvFileEntity(1)/data に対するハンドラ。
+    // /odata/v4/Example01Service/CsvFileEntity(n)/data に対するハンドラ。
     @On(event = CqnService.EVENT_READ)
     public List<CsvFileEntity> download(List<CsvFileEntity> csvFileEntities) throws IOException {
         Path path = Files.createTempFile(null, null);
@@ -101,6 +103,7 @@ public class Example01Handler implements EventHandler {
         }
         CsvFileEntity csvFileEntity = CsvFileEntity.create();
         csvFileEntity.setId(1);
+        csvFileEntity.setFilename(URLEncoder.encode("あいう.csv", StandardCharsets.UTF_8));
         csvFileEntity.setData(Files.newInputStream(path, StandardOpenOption.DELETE_ON_CLOSE));
         csvFileEntities = new ArrayList<>();
         csvFileEntities.add(csvFileEntity);

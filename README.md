@@ -97,11 +97,7 @@ Spring Actuator で取得できるメトリクスは OpenTelemetry で CLS へ�
   ```
   								<command>build --for ams</command>
   ```
-  をコメントアウトし、 `package.json` の
-  ```
-      "@sap/ams" : "^3"
-  ```
-  を削除する。
+  をコメントアウトする。
 
 ## 参考 URL
 
